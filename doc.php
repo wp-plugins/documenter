@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Wp Documenter
+ * Plugin Name: WP Documenter
  * Plugin URI:
  * Description: Documentation and Book is now easy way
  * Author: asaquzzaman
