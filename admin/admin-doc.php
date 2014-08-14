@@ -46,7 +46,6 @@ class DOC_Admin_Admin_doc {
 	}
 
 	function add_meta_box_document_post() {
-		add_meta_box( 'doc-metabox-documentation', __( 'Documentation', 'doc' ), array( $this, 'admin_doc' ), 'doc_documenter', 'side', 'high' );
 		add_meta_box( 'doc-metabox-section', __( 'Section', 'doc' ), array( $this, 'doc_section' ), 'doc_documenter', 'normal', 'high' );
 		add_meta_box( 'doc-metabox-section-menu', __( 'Section Menu', 'doc' ), array( $this, 'doc_section_menu' ), 'doc_documenter', 'side', 'low' );
 	}
