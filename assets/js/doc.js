@@ -12,7 +12,7 @@
 
         buttonControl: function() {
             var section_id = $('input[name="section_ID"]').val();
-            if ( section_id.length ) {
+            if ( typeof section_id !== "undefined" && section_id !== '' ) {
                 $('.doc-section-wrap .doc-section-submit').hide();
                 $('.doc-section-wrap .doc-udate-section-submit').show();
                 $('.doc-section-wrap .doc-cancel-section-submit').show();
