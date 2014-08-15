@@ -242,7 +242,9 @@
             }
 
             $.post( doc.ajax_url, data, function( res ) {
+                console.log(res);
                 if( res.success ) {
+
                     title_field.val('');
                     $('.doc-section-wrap').find('iframe').contents().find('body').html('Section Description...');
                     content_field.html('');

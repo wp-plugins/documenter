@@ -89,9 +89,8 @@ class DOC_Ajax {
 
 
     function new_documentation() {
-
+        error_reporting(0);
     	check_ajax_referer( 'doc_nonce' );
-
         $is_update = empty( $_POST['section_id'] ) ? false : true;
 
         $section_title = $_POST['section_title'];
