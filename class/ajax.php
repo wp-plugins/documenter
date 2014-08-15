@@ -29,8 +29,7 @@ class DOC_Ajax {
 
     function section_delete() {
         check_ajax_referer( 'doc_nonce' );
-        //wp_delete_post( $_POST['section_id'], true );
-
+        wp_delete_post( $_POST['section_id'], true );
         ob_start();
             doc_get_section_menu( $_POST['doc_id'] );
         wp_send_json_success( array('menu' => ob_get_clean(), 'section_id' => $_POST['section_id'] ) );
@@ -125,7 +124,7 @@ class DOC_Ajax {
 
         ob_start();
             doc_get_section_menu( $doc_id );
-        wp_send_json_success( array('menu' => ob_get_clean() ) );
+        wp_send_json_success( array('msg' => __('Section Update Successfully'), 'menu' => ob_get_clean() ) );
 
     }
 

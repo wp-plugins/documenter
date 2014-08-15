@@ -77,7 +77,7 @@ class Wp_doc {
         wp_enqueue_style( 'doc-read', plugins_url( 'assets/css/read.css', __FILE__ ), false, false, 'all' );
         wp_enqueue_script( 'lockfixed-sticky-scroll', plugins_url( 'assets/js/stickyMojo.js', __FILE__ ), array( 'jquery' ), false, true );
         wp_enqueue_script( 'doc-scri', plugins_url( 'assets/js/jquery.jpanelmenu.js', __FILE__ ), array( 'jquery' ), false, true );
-        wp_enqueue_script( 'doc-scripts', plugins_url( 'assets/js/doc.js', __FILE__ ), array( 'jquery' ), false, true );
+        wp_enqueue_script( 'doc-read', plugins_url( 'assets/js/read.js', __FILE__ ), array( 'jquery' ), false, true );
     }
 
 	function admin_menu() {
