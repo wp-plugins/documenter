@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Documenter
  * Plugin URI:
- * Description: Documentation and Book is now easy way
+ * Description: Documentation is now easy way
  * Author: asaquzzaman
  * Version: 0.1
  * Author URI: http://mishubd.com

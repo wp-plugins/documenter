@@ -7,6 +7,8 @@ Tested up to: 3.9
 Stable tag: 0.1
 License: GPLv2 or later
 
+Documentation is now easy way.
+
 == Description ==
 	Create your documentation and document's single page template for frontend.
 
