@@ -2,15 +2,13 @@
 
 Contributors: asaquzzaman
 Tags: Documenter, Documentation, Book, Text, Note
-Requires at least: 3.1
+Requires at least: 3.9
 Tested up to: 3.9
 Stable tag: 0.1
 License: GPLv2 or later
 
-Instant switching between user accounts in WordPress.
-
 == Description ==
-	Create your documentation, book and single page template
+	Create your documentation and document's single page template for frontend.
 
 == Installation ==
 
