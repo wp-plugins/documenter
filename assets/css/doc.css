@@ -1,0 +1,61 @@
+.fa-arrows-alt {
+	font-size: 11px;
+}
+.doc-section-menu-wrap .doc-dd-handle {
+	cursor: move;
+	color: #9c9c9c;
+}
+.doc-section-menu-wrap li {
+	position: relative;
+}
+
+.doc-section-menu-wrap .doc-delete {
+	float: right;
+	color: #9c9c9c;
+	cursor: pointer;
+}
+.doc-section-menu-wrap .doc-section-edit a {
+	text-decoration: none;
+	color: #000;
+}
+.doc-section-menu-wrap .doc-menu-action-wrap {
+	float: left;
+    margin-right: 9px;
+}
+
+.doc-clear {
+	clear: both;
+}
+.doc-section-wrap .doc-section-title {
+	font-size: 1.7em;
+    height: 1.7em;
+    line-height: 100%;
+    margin: 9px 0 15px;
+    outline: 0 none;
+    padding: 3px 8px;
+    width: 100%;
+}
+
+.doc-section-wrap .doc-section-submit,
+.doc-section-wrap .doc-udate-section-submit,
+.doc-section-wrap .doc-cancel-section-submit{
+	margin-top: 15px;
+}
+.doc-spinner {
+	background: url("../images/spinner.gif") no-repeat scroll 0 0 / 20px 20px rgba(0, 0, 0, 0);
+    display: none;
+    display: inline-block;
+    height: 20px;
+    margin: 17px 5px 0 19px;
+    opacity: 0.7;
+    width: 20px;
+}
+
+.doc-section-update {
+	background-color: #fafafa;
+    border-left: 4px solid #7ad03a;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+    padding: 7px 12px;
+    margin: 10px 0;
+    font-weight: bold;
+}

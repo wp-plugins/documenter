@@ -1,139 +1,117 @@
 <?php
-function hrm_user_can_access( $tab = null, $subtab = null, $access_point = null, $inside_role = false  ) {
+function doc_excerpt( $text, $length, $append = '...' ) {
+    $text = wp_strip_all_tags( $text, true );
+    $count = mb_strlen( $text );
+    $text = mb_substr( $text, 0, $length );
 
-
-    $user_id = get_current_user_id();
-    $super_admin = get_option( 'hrm_admin', true );
-
-    if ( $user_id == $super_admin ) {
-        return true;
+    if( $count > $length ) {
+        $text = $text . $append;
     }
 
-    $page = hrm_page();
-
-    //if tab has no access role
-    if ( isset( $page[$_GET['page']][$tab]['follow_access_role'] ) && ! $page[$_GET['page']][$tab]['follow_access_role'] ) {
-        return true;
-    }
-
-
-    $current_user_role = hrm_current_user_role();
-    $roles =  get_role( $current_user_role );
-
-    if ( $inside_role ) {
-        return  isset( $roles->capabilities[$access_point] ) ? $access_point : false;
-    }
-
-    $tab_access = isset( $roles->capabilities[$tab.'_'.$access_point] ) ? $roles->capabilities[$tab.'_'.$access_point] : '';
-    $subtab_access = isset( $roles->capabilities[$subtab.'_'.$access_point] ) ? $roles->capabilities[$subtab.'_'.$access_point] : '';
-
-    if( $tab_access != $access_point ) {
-        return false;
-    }
-
-    if( $subtab == null ) {
-        if( $roles->capabilities[$tab.'_'.$access_point] == $access_point ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    if( $subtab_access != $access_point ) {
-        return false;
-    }
-
-    if( isset( $roles->capabilities[$subtab.'_'.$access_point] ) && $roles->capabilities[$subtab.'_'.$access_point]  == $access_point ) {
-        return true;
-    } else {
-        return false;
-    }
-
+    return $text;
 }
 
-function hrm_current_user_role() {
-    global $current_user;
-
-    $user_roles = $current_user->roles;
-    $user_role = array_shift($user_roles);
-
-    return $user_role;
-}
-
-/**
- * Helper function for converting a normal date string to unix date/time string
- *
- * @since 0.1
- * @param string $date
- * @param int $gmt
- * @return string
- */
-function hrm_date2mysql( $date, $gmt = 0 ) {
-    if ( empty( $date ) ) {
-        return;
-    }
-
-    $time = strtotime( $date );
-    return ( $gmt ) ? gmdate( 'Y-m-d H:i:s', $time ) : gmdate( 'Y-m-d H:i:s', ( $time + ( get_option( 'timezone_string' ) * 3600 ) ) );
-}
-
-function get_date2mysql( $date ) {
-    if ( empty( $date ) ) {
-        return;
-    }
-    $date = strtotime( $date );
-    $format = 'M j, Y';
-    return date_i18n( $format, $date );
-}
-
-function hrm_get_time( $time, $strtotime = true ) {
-    $time_format = get_option('time_format');
-    $time_format = apply_filters( 'hrm_time_format', $time_format );
-    if ( $strtotime ) {
-        $time = strtotime( $time );
-    }
-    return date( $time_format, $time );
-}
-
-function hrm_get_punch_in_time( $time, $strtotime = true ) {
-    $date_format = get_option('date_format');
-    $time_format = get_option('time_format');
-    if ( $strtotime ) {
-        $time = strtotime($time);
-    }
-
-    $format = $date_format .' '. $time_format;
-    return date( $format , $time );
-}
-
-function hrm_second_to_time( $seconds ) {
-    $total_second = $seconds;
-    // extract hours
-    $hours = floor( $seconds / (60 * 60) );
-
-    // extract minutes
-    $divisor_for_minutes = $seconds % (60 * 60);
-    $minutes = floor( $divisor_for_minutes / 60 );
-
-    // extract the remaining seconds
-    $divisor_for_seconds = $divisor_for_minutes % 60;
-    $seconds = ceil( $divisor_for_seconds );
-
-    // return the final array
-    $obj = array(
-        "hour"         => str_pad( (int) $hours, 2, '0', STR_PAD_LEFT ),
-        "minute"       => str_pad( (int) $minutes, 2, '0', STR_PAD_LEFT ),
-        "second"       => str_pad( (int) $seconds, 2, '0', STR_PAD_LEFT ),
-        'total_second' => $total_second
+function doc_get_section( $doc_id ) {
+    $args = array(
+        'numberposts'      => -1,
+        'orderby'          => 'menu_order',
+        'order'            => 'ASC',
+        'post_type'        => 'doc_section',
+        'post_parent'      => $doc_id,
+        'post_status'      => 'publish',
     );
 
-    return $obj;
+    $posts = get_posts( $args );
+    $section = array();
+    foreach ( $posts as $key => $post ) {
+        $section[$post->ID] = $post;
+    }
+    return $section;
 }
 
-function hrm_single_tab_user_role_change( $post ) {
-    var_dump( $post ); die();
+function doc_get_menu_meta($doc_id) {
+    return get_post_meta( $doc_id, '_documenter_menu', true );
 }
 
-/*function pri( $data ) {
-    echo '<pre>'; print_r( $data ); echo '</pre>';
-}*/
+function doc_get_section_menu( $doc_id ) {
+    $menu = doc_get_menu_meta($doc_id);
+    $section = doc_get_section( $doc_id );
+
+    $menu['parent'] = isset( $menu['parent'] ) ? $menu['parent'] : array();
+    ?>
+    <div class="doc-dd" id="doc-nestable">
+        <ol class="doc-dd-list">
+            <?php
+            foreach ( $menu['parent'] as $post_id ) {
+                if ( isset($section[$post_id]) ) {
+                ?>
+                <li class="doc-dd-item doc-item-<?php echo $post_id; ?>" data-id="<?php echo $post_id; ?>">
+                    <div class="doc-menu-text-wrap">
+                        <div class="doc-delete"><i class="fa fa-times doc-section-delete"></i></div>
+                        <span class="doc-section-edit">
+                            <a href="<?php echo '#doc-cotent-id-' . $post_id; ?>">
+                                <?php echo doc_excerpt( $section[$post_id]->post_title, 20 ); ?>
+                            </a>
+
+                        </span>
+
+                        <div class="doc-menu-action-wrap">
+                            <i class="doc-dd-handle   fa fa-arrows-alt"></i>
+
+                        </div>
+                        <div class="doc-clear"></div>
+                    </div>
+                    <?php
+                    if ( array_key_exists( $post_id, $menu['child'] ) ) {
+                        doc_show_child_menu( $post_id, $section, $menu['child'] );
+                    }
+                    ?>
+                </li>
+                <?php
+                }
+            }
+            ?>
+        </ol>
+    </div>
+    <?php
+}
+
+function doc_show_child_menu( $post_id, $section, $menu_child ) {
+
+    ?>
+    <ol class="doc-dd-list">
+        <?php
+        foreach ( $menu_child[$post_id] as $key => $id ) {
+            if ( isset( $section[$id] ) ) {
+            ?>
+            <li class="doc-dd-item doc-item-<?php echo $section[$id]->ID; ?>" data-id="<?php echo $section[$id]->ID; ?>">
+                <div class="doc-menu-text-wrap">
+                    <div class="doc-delete"><i class="fa fa-times doc-section-delete"></i></div>
+                    <span class="doc-section-edit">
+                        <a href="<?php echo '#doc-cotent-id-' . $id; ?>">
+                        <?php echo doc_excerpt( $section[$id]->post_title, 15 ); ?>
+                        </a>
+
+                    </span>
+
+                    <div class="doc-menu-action-wrap">
+                        <i class="doc-dd-handle fa fa-arrows-alt"></i>
+
+                    </div>
+                    <div class="doc-clear"></div>
+                </div>
+                <?php
+                if ( array_key_exists( $id, $menu_child ) ) {
+                    doc_show_child_menu( $id, $section, $menu_child );
+                }
+                ?>
+            </li>
+            <?php
+            }
+        }
+        ?>
+    </ol>
+    <?php
+}
+
+?>
