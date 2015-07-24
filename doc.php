@@ -81,7 +81,6 @@ class Wp_doc {
 	function admin_menu() {
 		$capability = 'read';
 		$menu = add_menu_page( __( 'Documenter', 'doc' ), __( 'Documenter', 'doc' ), $capability, 'doc-documenter', array($this, 'admin_page_handler'), 'dashicons-exerpt-view' );
-        $supports = add_submenu_page( 'doc-documenter', __( 'Support', 'doc' ), __( 'Support', 'doc' ), $capability, 'doc-support', array($this, 'admin_page_handler') );
 	}
 
     function scripts() {
