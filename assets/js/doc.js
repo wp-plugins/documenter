@@ -19,6 +19,21 @@
             }
         },
 
+
+        
+        customtinyMCE: function(id) {
+
+            tinyMCE.init({
+                skin : "wp_theme",
+                mode : "exact",
+                elements : id,
+                theme: "modern",
+                menubar: false,
+                toolbar1: 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link,unlink,spellchecker,wp_fullscreen',
+                plugins: "wpfullscreen,charmap,colorpicker,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpautoresize,wpeditimage,wpgallery,wplink,wpdialogs,wpview"
+            });
+        },
+
         SectionEdit: function() {
             var self = $(this),
                 data = {
@@ -28,17 +43,23 @@
                 };
 
             $.post(doc.ajax_url, data, function(res) {
+                if ( res.success ) {
 
-                $('input[name="section_ID"]').val(res.data.post.ID);
-                $('input[name="section_title"]').val(res.data.post.post_title);
-                tinyMCE.get('doc-section-editor').setContent(res.data.post.post_content);
+                    $('input[name="section_ID"]').val(res.data.post.ID);
+                    $('input[name="section_title"]').val(res.data.post.post_title);
+                    $('#doc-section-editor').html(res.data.post.post_content);
+                    tinymce.execCommand( 'mceRemoveEditor', true, 'doc-section-editor' );
+                    tinymce.execCommand( 'mceAddEditor', true, 'doc-section-editor' );
+                    tinyMCE.get('doc-section-editor').setContent(res.data.post.post_content);
 
-                $('.doc-section-wrap .doc-section-submit').hide();
-                $('.doc-section-wrap .doc-udate-section-submit').show();
-                $('.doc-section-wrap .doc-cancel-section-submit').show();
+                    $('.doc-section-wrap .doc-section-submit').hide();
+                    $('.doc-section-wrap .doc-udate-section-submit').show();
+                    $('.doc-section-wrap .doc-cancel-section-submit').show();
 
-                var content_wrap = $('.doc-section-menu-wrap').offset().top+180;
-                Documentation.scroll(content_wrap);
+                    var content_wrap = $('.doc-section-menu-wrap').offset().top+180;
+                    Documentation.scroll(content_wrap);                    
+                }
+
             });
         },
 
@@ -178,7 +199,7 @@
             var data = {
                 action: 'new_documentation',
                 section_title: title,
-                section_desc: content_field.val(),
+                section_desc: tinyMCE.get('doc-section-editor').getContent(), //content_field.val(),
                 post_id: $('input[name="post_ID"]').val(),
                 section_id: $('input[name="section_ID"]').val(),
                 _wpnonce: doc._wpnonce
